@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Benovrix Global Groups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#070707;
+    --bg-2:#0d0c09;
+    --gold-1:#f4d675;
+    --gold-2:#c9992e;
+    --gold-3:#8a6a1a;
+    --white:#f2f0ea;
+    --muted:#b9b3a4;
+    --line: rgba(212,175,55,0.28);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--white);
+    font-family:'Poppins', sans-serif;
+    overflow-x:hidden;
+  }
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img,svg{display:block;}
+
+  /* ---------- NAV ---------- */
+  .navbar{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(6,5,3,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:1240px; margin:0 auto; padding:16px 32px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .nav-logo{
+    font-family:'Playfair Display', serif;
+    font-weight:800; font-size:22px; letter-spacing:1px;
+    background: linear-gradient(180deg, var(--gold-1), var(--gold-3));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .nav-logo span{ display:block; font-size:10px; letter-spacing:4px; color:var(--muted); font-family:'Poppins',sans-serif; font-weight:500; -webkit-text-fill-color:var(--muted); }
+  .nav-links{ display:flex; align-items:center; gap:34px; }
+  .nav-links a{ font-size:13.5px; letter-spacing:1px; text-transform:uppercase; color:var(--white); font-weight:500; position:relative; padding-bottom:4px; }
+  .nav-links a:hover{ color:var(--gold-1); }
+  .nav-cta{
+    padding:11px 22px; border-radius:2px; font-size:12.5px; font-weight:600; letter-spacing:1px; text-transform:uppercase;
+    background:linear-gradient(180deg, var(--gold-1), var(--gold-2)); color:#1a1200;
+  }
+  .nav-toggle{ display:none; flex-direction:column; gap:5px; cursor:pointer; }
+  .nav-toggle span{ width:24px; height:2px; background:var(--gold-1); }
+
+  @media (max-width:900px){
+    .nav-links{
+      position:absolute; top:100%; left:0; right:0;
+      background:#0a0906; flex-direction:column; align-items:flex-start;
+      padding:20px 32px; gap:18px; border-bottom:1px solid var(--line);
+      display:none;
+    }
+    .nav-links.open{ display:flex; }
+    .nav-toggle{ display:flex; }
+  }
+
+  /* ---------- HERO SLIDER ---------- */
+  .slider{
+    position:relative;
+    height:100vh; min-height:560px;
+    overflow:hidden;
+    background:var(--bg);
+  }
+  .slide{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+    opacity:0; visibility:hidden;
+    transition:opacity 1s ease;
+    padding:0 24px;
+  }
+  .slide.active{ opacity:1; visibility:visible; }
+  .slide-bg{
+    position:absolute; inset:0; z-index:0;
+  }
+  .slide:nth-child(1) .slide-bg{ background: radial-gradient(circle at 30% 30%, rgba(201,153,46,0.18), transparent 60%), linear-gradient(160deg, #0a0906, #050403); }
+  .slide:nth-child(2) .slide-bg{ background: radial-gradient(circle at 70% 40%, rgba(201,153,46,0.16), transparent 55%), linear-gradient(200deg, #0a0906, #050403); }
+  .slide:nth-child(3) .slide-bg{ background: radial-gradient(circle at 50% 70%, rgba(201,153,46,0.16), transparent 55%), linear-gradient(140deg, #0a0906, #050403); }
+  .slide:nth-child(4) .slide-bg{ background: radial-gradient(circle at 20% 60%, rgba(201,153,46,0.16), transparent 55%), linear-gradient(180deg, #0a0906, #050403); }
+  .slide-content{ position:relative; z-index:2; max-width:760px; }
+  .slide-eyebrow{ letter-spacing:6px; font-size:12.5px; color:var(--gold-1); font-weight:600; text-transform:uppercase; margin-bottom:20px;}
+  .slide-title{
+    font-family:'Playfair Display', serif; font-weight:900;
+    font-size:clamp(32px,6vw,64px); line-height:1.08;
+    background: linear-gradient(180deg, #fdf2c0 0%, var(--gold-1) 35%, var(--gold-3) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    margin-bottom:20px;
+  }
+  .slide-text{ color:var(--muted); font-size:16.5px; line-height:1.75; max-width:600px; margin:0 auto 30px; }
+  .slide-quote{ font-family:'Playfair Display', serif; font-style:italic; font-size:18px; color:var(--white); margin-top:6px; }
+  .slide-quote span{ display:block; margin-top:8px; font-size:14px; color:var(--gold-1); font-style:normal; letter-spacing:1px; }
+
+  .slider-arrows{
+    position:absolute; top:50%; left:0; right:0; transform:translateY(-50%);
+    display:flex; justify-content:space-between; z-index:5; padding:0 24px; pointer-events:none;
+  }
+  .arrow{
+    pointer-events:all;
+    width:44px; height:44px; border-radius:50%;
+    border:1.5px solid var(--gold-2); color:var(--gold-1);
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; cursor:pointer; background:rgba(0,0,0,0.35);
+    transition:background .2s ease;
+  }
+  .arrow:hover{ background:rgba(201,153,46,0.18); }
+  .slider-dots{
+    position:absolute; bottom:34px; left:0; right:0; z-index:5;
+    display:flex; justify-content:center; gap:10px;
+  }
+  .dot{
+    width:9px; height:9px; border-radius:50%; border:1.5px solid var(--gold-2);
+    cursor:pointer; background:transparent; transition:background .2s ease;
+  }
+  .dot.active{ background:var(--gold-1); }
+
+  .hero-ctas{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:8px; }
+  .btn{
+    padding:14px 30px; border-radius:2px; font-weight:600; font-size:13.5px;
+    letter-spacing:1px; text-transform:uppercase; cursor:pointer; display:inline-block;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .btn-primary{ background:linear-gradient(180deg, var(--gold-1), var(--gold-2)); color:#1a1200; border:1px solid var(--gold-1); }
+  .btn-outline{ background:transparent; color:var(--gold-1); border:1px solid var(--gold-2); }
+  .btn:hover{ transform:translateY(-3px); box-shadow:0 10px 26px rgba(212,175,55,0.18); }
+
+  .scroll-cue{
+    position:absolute; bottom:34px; right:34px; z-index:5;
+    color:var(--muted); font-size:11px; letter-spacing:2px; text-transform:uppercase;
+    writing-mode:vertical-rl;
+  }
+
+  /* ---------- SECTIONS ---------- */
+  .wrap{ max-width:1200px; margin:0 auto; padding:0 32px; }
+  .section{ padding:88px 0; border-top:1px solid var(--line); }
+  .section-head{ text-align:center; max-width:680px; margin:0 auto 50px; }
+  .eyebrow{ letter-spacing:5px; font-size:12px; color:var(--gold-2); text-transform:uppercase; font-weight:600; margin-bottom:14px; }
+  .section-title{
+    font-family:'Playfair Display', serif; font-weight:800;
+    font-size:clamp(26px,4vw,40px); color:var(--gold-1); letter-spacing:.5px;
+  }
+  .section-desc{ color:var(--muted); font-size:15.5px; line-height:1.75; margin-top:16px; }
+
+  /* SERVICES GRID */
+  .services-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:26px;
+  }
+  .service-card{
+    background:var(--bg-2); border:1px solid var(--line); border-radius:8px;
+    padding:32px 28px; transition:transform .25s ease, border-color .25s ease;
+  }
+  .service-card:hover{ transform:translateY(-6px); border-color:var(--gold-2); }
+  .service-icon{
+    width:54px; height:54px; border-radius:10px; border:1.5px solid var(--gold-2);
+    display:flex; align-items:center; justify-content:center; font-size:24px; color:var(--gold-1);
+    margin-bottom:20px;
+  }
+  .service-card h3{
+    font-family:'Playfair Display', serif; font-size:19px; color:var(--white); margin-bottom:14px; line-height:1.35;
+  }
+  .service-card ul{ display:flex; flex-direction:column; gap:9px; }
+  .service-card li{
+    font-size:13.5px; color:var(--muted); line-height:1.6; padding-left:16px; position:relative;
+  }
+  .service-card li::before{
+    content:"—"; position:absolute; left:0; color:var(--gold-2);
+  }
+
+  /* PRESENCE */
+  .presence-row{ display:flex; gap:24px; flex-wrap:wrap; justify-content:center; }
+  .presence-flag{ display:flex; flex-direction:column; align-items:center; gap:10px; color:var(--muted); font-size:11.5px; letter-spacing:1px; font-weight:600; width:88px; }
+  .flag-circle{ width:58px; height:58px; border-radius:10px; border:2px solid var(--gold-2); display:flex; align-items:center; justify-content:center; font-size:25px; background:#111; }
+
+  .values-strip{ display:flex; justify-content:space-around; flex-wrap:wrap; gap:24px; padding-top:50px; margin-top:50px; border-top:1px solid var(--line); }
+  .value-item{ text-align:center; color:var(--gold-1); font-family:'Playfair Display', serif; font-style:italic; font-size:16px; }
+  .value-item span{ display:block; font-size:26px; margin-bottom:8px; }
+
+  /* CONTACT */
+  .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:44px; }
+  .contact-info h2{ font-family:'Playfair Display', serif; color:var(--gold-1); font-size:26px; margin-bottom:16px; }
+  .contact-info p{ color:var(--muted); font-size:15px; line-height:1.75; margin-bottom:24px; }
+  .contact-list{ display:flex; flex-direction:column; gap:16px; }
+  .contact-list .row{ display:flex; align-items:center; gap:14px; font-size:15px; }
+  .contact-list .icon{ width:38px; height:38px; border-radius:8px; border:1.5px solid var(--gold-1); display:flex; align-items:center; justify-content:center; font-size:16px; color:var(--gold-1); flex-shrink:0; }
+  .contact-list a{ color:var(--white); border-bottom:1px solid transparent; }
+  .contact-list a:hover{ border-color:var(--gold-1); }
+  .note{ font-size:12px; color:var(--muted); margin-top:20px; line-height:1.6; }
+
+  .quote-form{
+    background:var(--bg-2); border:1px solid var(--line); border-radius:8px; padding:34px;
+  }
+  .quote-form h3{ font-family:'Playfair Display', serif; color:var(--gold-1); font-size:20px; margin-bottom:22px; }
+  .form-row{ margin-bottom:16px; }
+  .form-row label{ display:block; font-size:12px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:7px; }
+  .form-row input, .form-row select, .form-row textarea{
+    width:100%; background:#050403; border:1px solid var(--line); color:var(--white);
+    padding:12px 14px; border-radius:4px; font-family:'Poppins',sans-serif; font-size:14px;
+  }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus{ outline:none; border-color:var(--gold-2); }
+  .form-row textarea{ resize:vertical; min-height:90px; }
+  .quote-form button{ width:100%; border:none; }
+
+  footer{ text-align:center; padding:36px 0 50px; color:var(--muted); font-size:13px; letter-spacing:.5px; border-top:1px solid var(--line); }
+
+  @media (max-width:900px){
+    .services-grid{ grid-template-columns:repeat(2,1fr); }
+  }
+  @media (max-width:760px){
+    .services-grid{ grid-template-columns:1fr; }
+    .contact-grid{ grid-template-columns:1fr; }
+    .slider-arrows{ padding:0 10px; }
+    .arrow{ width:36px; height:36px; font-size:15px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="nav-logo">BENOVRIX<span>GLOBAL GROUPS</span></div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#top">Home</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#presence">Global Presence</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#contact" class="nav-cta">Get A Quote</a></li>
+    </ul>
+    <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- HERO SLIDER -->
+<section class="slider" id="top">
+  <div class="slide active">
+    <div class="slide-bg"></div>
+    <div class="slide-content">
+      <div class="slide-eyebrow">Founder &amp; Chairman — Benedict Devasuganth J.</div>
+      <div class="slide-title">BENOVRIX<br>GLOBAL GROUPS</div>
+      <p class="slide-text">Diverse Businesses. Unified Vision. Global Impact. A single group bringing together logistics, real estate, media, education and technology under one trusted name.</p>
+      <div class="hero-ctas">
+        <a href="#services" class="btn btn-primary">Get In Touch</a>
+        <a href="#contact" class="btn btn-outline">Get A Quote</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-bg"></div>
+    <div class="slide-content">
+      <div class="slide-eyebrow">What We Do</div>
+      <div class="slide-title">7 Business Verticals.<br>One Roof.</div>
+      <p class="slide-text">From logistics and real estate to media, education and tax consulting — every vertical is built to move your business forward.</p>
+      <div class="hero-ctas">
+        <a href="#services" class="btn btn-primary">Explore Our Services</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-bg"></div>
+    <div class="slide-content">
+      <div class="slide-eyebrow">Worldwide Reach</div>
+      <div class="slide-title">Trusted Across<br>8 Countries</div>
+      <p class="slide-text">India, United Kingdom, United States, Canada, UAE, Russia, China and Japan — our footprint spans the globe.</p>
+      <div class="hero-ctas">
+        <a href="#presence" class="btn btn-outline">See Our Presence</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-bg"></div>
+    <div class="slide-content">
+      <div class="slide-eyebrow">Our Foundation</div>
+      <div class="slide-quote">
+        "I can do all things through Christ who strengthens me."
+        <span>— Philippians 4:13</span>
+      </div>
+      <div class="hero-ctas" style="margin-top:26px;">
+        <a href="#contact" class="btn btn-primary">Get A Quote</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="slider-arrows">
+    <div class="arrow" onclick="changeSlide(-1)">&#10094;</div>
+    <div class="arrow" onclick="changeSlide(1)">&#10095;</div>
+  </div>
+  <div class="slider-dots" id="sliderDots"></div>
+  <div class="scroll-cue">SCROLL</div>
+</section>
+
+<!-- SERVICES -->
+<div class="wrap">
+<section class="section" id="services">
+  <div class="section-head">
+    <div class="eyebrow">What We Offer</div>
+    <h2 class="section-title">Our Business Verticals</h2>
+    <p class="section-desc">Seven specialised verticals, one integrated group — each built to deliver focused expertise while working together to serve you end-to-end.</p>
+  </div>
+
+  <div class="services-grid">
+
+    <div class="service-card">
+      <div class="service-icon">🚚</div>
+      <h3>Logistics &amp; Financial Solutions</h3>
+      <ul>
+        <li>End-to-end freight, warehousing &amp; fleet management</li>
+        <li>Working capital &amp; trade finance support</li>
+        <li>Real-time shipment tracking &amp; reporting</li>
+        <li>Customised logistics plans for SMEs &amp; enterprises</li>
+      </ul>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">🏢</div>
+      <h3>Real Estate &amp; Infrastructure Development</h3>
+      <ul>
+        <li>Residential, commercial &amp; industrial projects</li>
+        <li>Land acquisition &amp; legal due diligence</li>
+        <li>Infrastructure planning &amp; execution</li>
+        <li>Property investment advisory</li>
+      </ul>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">📐</div>
+      <h3>Architecture &amp; Strategic Joint Ventures</h3>
+      <ul>
+        <li>Concept-to-completion architectural design</li>
+        <li>Structural planning &amp; sustainable practices</li>
+        <li>Strategic partnerships for large-scale developments</li>
+        <li>Joint venture structuring &amp; project financing</li>
+      </ul>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">🖥️</div>
+      <h3>Event Technology, Digital Solutions &amp; Marketing</h3>
+      <ul>
+        <li>Corporate event planning &amp; technology integration</li>
+        <li>Brand strategy, digital campaigns &amp; social media</li>
+        <li>Website &amp; app development</li>
+        <li>Virtual &amp; hybrid event platforms</li>
+      </ul>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">🎓</div>
+      <h3>Academy, Talent Acquisition &amp; Workforce Development</h3>
+      <ul>
+        <li>Skill-based training programs &amp; certifications</li>
+        <li>End-to-end recruitment &amp; staffing solutions</li>
+        <li>Corporate upskilling &amp; leadership development</li>
+        <li>Campus partnerships &amp; placement support</li>
+      </ul>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">📰</div>
+      <h3>Media, News &amp; Publishing</h3>
+      <ul>
+        <li>Digital &amp; print media publishing</li>
+        <li>News curation &amp; content production</li>
+        <li>Brand storytelling &amp; PR services</li>
+        <li>Multimedia content creation</li>
+      </ul>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">🧮</div>
+      <h3>Tax Consulting Services</h3>
+      <ul>
+        <li>Direct &amp; indirect tax advisory</li>
+        <li>GST, income tax filing &amp; compliance</li>
+        <li>Corporate tax planning &amp; audits</li>
+        <li>Cross-border taxation support</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- GLOBAL PRESENCE -->
+<section class="section" id="presence">
+  <div class="section-head">
+    <div class="eyebrow">Worldwide</div>
+    <h2 class="section-title">Global Presence</h2>
+    <p class="section-desc">Headquartered in India with a growing footprint across key global markets.</p>
+  </div>
+
+  <div class="presence-row">
+    <div class="presence-flag"><div class="flag-circle">🇮🇳</div>INDIA</div>
+    <div class="presence-flag"><div class="flag-circle">🇬🇧</div>UNITED KINGDOM</div>
+    <div class="presence-flag"><div class="flag-circle">🇺🇸</div>UNITED STATES</div>
+    <div class="presence-flag"><div class="flag-circle">🇨🇦</div>CANADA</div>
+    <div class="presence-flag"><div class="flag-circle">🇦🇪</div>UAE</div>
+    <div class="presence-flag"><div class="flag-circle">🇷🇺</div>RUSSIA</div>
+    <div class="presence-flag"><div class="flag-circle">🇨🇳</div>CHINA</div>
+    <div class="presence-flag"><div class="flag-circle">🇯🇵</div>JAPAN</div>
+  </div>
+
+  <div class="values-strip">
+    <div class="value-item"><span>✅</span>Quality</div>
+    <div class="value-item"><span>💡</span>Innovation</div>
+    <div class="value-item"><span>🤝</span>Integrity</div>
+    <div class="value-item"><span>⭐</span>Excellence</div>
+  </div>
+</section>
+
+<!-- CONTACT / GET A QUOTE -->
+<section class="section" id="contact">
+  <div class="section-head">
+    <div class="eyebrow">Let's Work Together</div>
+    <h2 class="section-title">Get A Quote Or Request A Service</h2>
+    <p class="section-desc">Tell us what you need and our team will get back to you shortly — or reach us directly using the details below.</p>
+  </div>
+
+  <div class="contact-grid">
+    <div class="contact-info">
+      <h2>Contact Us</h2>
+      <p>Whether it's logistics, real estate, tax consulting or any of our other verticals — reach out and our team will connect you with the right expert.</p>
+      <div class="contact-list">
+        <div class="row">
+          <div class="icon">📞</div>
+          <a href="tel:+919445211469">+91 94452 11469</a>
+        </div>
+        <div class="row">
+          <div class="icon">✉️</div>
+          <a href="mailto:info@benrovixglobalgroups.com">info@benrovixglobalgroups.com</a>
+        </div>
+        <div class="row">
+          <div class="icon">🌐</div>
+          <a href="https://www.benrovixglobalgroups.com/" target="_blank" rel="noopener">www.benrovixglobalgroups.com</a>
+        </div>
+      </div>
+      <p class="note">Note: the brand name reads "Benovrix" while the email/website use "benrovixglobalgroups.com" — worth confirming the correct spelling before this goes live.</p>
+    </div>
+
+    <div class="quote-form">
+      <h3>Request A Quote</h3>
+      <form action="mailto:info@benrovixglobalgroups.com" method="post" enctype="text/plain">
+        <div class="form-row">
+          <label>Full Name</label>
+          <input type="text" name="name" placeholder="Your name" required>
+        </div>
+        <div class="form-row">
+          <label>Phone Number</label>
+          <input type="tel" name="phone" placeholder="Your phone number" required>
+        </div>
+        <div class="form-row">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="Your email address" required>
+        </div>
+        <div class="form-row">
+          <label>Service Needed</label>
+          <select name="service">
+            <option>Logistics &amp; Financial Solutions</option>
+            <option>Real Estate &amp; Infrastructure Development</option>
+            <option>Architecture &amp; Strategic Joint Ventures</option>
+            <option>Event Technology, Digital Solutions &amp; Marketing</option>
+            <option>Academy, Talent Acquisition &amp; Workforce Development</option>
+            <option>Media, News &amp; Publishing</option>
+            <option>Tax Consulting Services</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Message</label>
+          <textarea name="message" placeholder="Tell us briefly what you need"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Request</button>
+      </form>
+    </div>
+  </div>
+</section>
+</div>
+
+<footer>
+  Copyright © 2026 Benovrix Global Groups — All Rights Reserved.
+</footer>
+
+<script>
+  // Slider
+  var slides = document.querySelectorAll('.slide');
+  var dotsWrap = document.getElementById('sliderDots');
+  var current = 0;
+
+  slides.forEach(function(s, i){
+    var d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = function(){ goToSlide(i); };
+    dotsWrap.appendChild(d);
+  });
+  var dots = document.querySelectorAll('.dot');
+
+  function goToSlide(i){
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (i + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+  function changeSlide(dir){ goToSlide(current + dir); }
+
+  var autoSlide = setInterval(function(){ changeSlide(1); }, 6000);
+
+  // Mobile nav toggle
+  document.getElementById('navToggle').addEventListener('click', function(){
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    a.addEventListener('click', function(){
+      document.getElementById('navLinks').classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>
